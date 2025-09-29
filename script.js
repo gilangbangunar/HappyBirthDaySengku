@@ -335,7 +335,14 @@ function updateCelebrationCopy(preview) {
 function initSakuraToggle() {
     const toggleButton = qs('[data-toggle-sakura]');
     const layer = qs('[data-sakura-layer]');
-    if (!toggleButton || !layer) return;
+    if (!layer) return;
+
+    if (!toggleButton) {
+        if (isSakuraActive) {
+            startSakura(layer);
+        }
+        return;
+    }
 
     const updateState = () => {
         toggleButton.classList.toggle('is-active', isSakuraActive);
