@@ -1,4 +1,4 @@
-﻿:root {
+:root {
     --pink-soft: #ffdbe8;
     --pink-medium: #ff9fc5;
     --pink-strong: #ff6fa8;
@@ -109,6 +109,10 @@ main {
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
+}
+
+.hero__actions--single {
+    justify-content: center;
 }
 
 .hero__button {
