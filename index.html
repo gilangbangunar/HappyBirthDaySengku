@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Kamu yang Manis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="floating-hearts" aria-hidden="true"></div>
+    <div class="sakura-layer" data-sakura-layer aria-hidden="true"></div>
+    <header class="hero">
+        <div class="hero__content">
+            <p class="hero__subtitle">Menuju 1 Oktober 2025</p>
+            <h1 class="hero__title">Selamat Ulang Tahun, Manisku</h1>
+            <p class="hero__text">Website kecil ini kubuat khusus untukmu, perempuan paling manis yang selalu membuat hari-hariku berwarna pink pastel.</p>
+            <div class="hero__actions hero__actions--single">
+                <button type="button" class="hero__button" data-scroll="love-timeline" data-play-backsound>Mulai Perjalanannya</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="countdown" aria-labelledby="countdown-title">
+            <h2 id="countdown-title">Hitung Mundur Menuju Hari Spesialmu</h2>
+            <div class="countdown__timer" role="timer" aria-live="polite">
+                <div class="countdown__unit"><span data-days>0</span><small>Hari</small></div>
+                <div class="countdown__unit"><span data-hours>0</span><small>Jam</small></div>
+                <div class="countdown__unit"><span data-minutes>0</span><small>Menit</small></div>
+                <div class="countdown__unit"><span data-seconds>0</span><small>Detik</small></div>
+            </div>
+            <div class="countdown__actions">
+                <button type="button" class="countdown__preview" data-preview-celebration>Lihat Efek Malam Itu</button>
+                <small class="countdown__hint">Kalau kamu nggak sabar nunggu 00:00, bisa klik dulu tombol kecil ini.</small>
+            </div>
+        </section>
+
+        <section class="timeline" id="love-timeline" aria-labelledby="timeline-title">
+            <h2 id="timeline-title">Rekam Jejak Manis Kita</h2>
+            <p class="section-lead">Klik tiap momen untuk membuka catatan kecil dariku.</p>
+            <div class="timeline__grid">
+                <article class="timeline__card" tabindex="0" data-moment>
+                    <h3>Pertemuan Pertama</h3>
+                    <p class="timeline__teaser">Saat semuanya terasa baru dan deg-degan.</p>
+                    <div class="timeline__detail">Aku masih ingat bagaimana tawamu langsung meruntuhkan semua canggung yang ada. Sejak saat itu, aku tahu kamu itu spesial.</div>
+                </article>
+                <article class="timeline__card" tabindex="0" data-moment>
+                    <h3>Janji Pertama</h3>
+                    <p class="timeline__teaser">Tentang mimpi, tentang kita.</p>
+                    <div class="timeline__detail">Kamu bilang ingin dunia yang penuh warna pink. Ini caraku menepati janji kecil itu.</div>
+                </article>
+                <article class="timeline__card" tabindex="0" data-moment>
+                    <h3>Setiap Perpisahan</h3>
+                    <p class="timeline__teaser">Kangen yang selalu manis.</p>
+                    <div class="timeline__detail">Jeda di antara pertemuan tidak pernah mudah, tapi kangen padamu justru mengajari aku cara mencintai lebih hangat.</div>
+                </article>
+                <article class="timeline__card" tabindex="0" data-moment>
+                    <h3>Esok Hari</h3>
+                    <p class="timeline__teaser">Tempat harapanmu kusimpan.</p>
+                    <div class="timeline__detail">Setiap cerita baru kita mulai dari sini. Tulis semua harapanmu di bawah, dan aku akan menjemputnya satu per satu.</div>
+                </article>
+            </div>
+        </section>
+
+        <section class="love-notes" aria-labelledby="love-notes-title">
+            <h2 id="love-notes-title">Kenapa Kamu Selalu Manis</h2>
+            <p class="section-lead">Geser kartu di bawah ini, masing-masing menyimpan alasan kenapa aku jatuh cinta setiap hari.</p>
+            <div class="love-notes__carousel" data-carousel>
+                <button class="carousel__control" data-direction="prev" aria-label="Kartu sebelumnya">❮</button>
+                <div class="carousel__track">
+                    <div class="carousel__item">
+                        <h3>Tawamu</h3>
+                        <p>Seperti es krim rasa cotton candy yang tidak pernah habis. Manis, lembut, dan bikin ketagihan.</p>
+                    </div>
+                    <div class="carousel__item">
+                        <h3>Kebaikanmu</h3>
+                        <p>Kamu selalu tahu cara membuat orang lain nyaman, termasuk aku yang selalu kamu jaga perasaannya.</p>
+                    </div>
+                    <div class="carousel__item">
+                        <h3>Mimpimu</h3>
+                        <p>Ambisimu menginspirasi aku untuk jadi versi terbaik dari diri sendiri, lalu berjalan berdampingan denganmu.</p>
+                    </div>
+                    <div class="carousel__item">
+                        <h3>Kemandirianmu</h3>
+                        <p>Kamu kuat, tapi tetap mau berbagi bahu. Di situlah aku menemukan rumah.</p>
+                    </div>
+                </div>
+                <button class="carousel__control" data-direction="next" aria-label="Kartu berikutnya">❯</button>
+            </div>
+        </section>
+
+        <section class="wishlist" aria-labelledby="wishlist-title">
+            <h2 id="wishlist-title">Ruang Harapan dari Kamu</h2>
+            <p class="section-lead">Isi form di bawah ya. Aku ingin tahu semua keinginan, doa, dan cerita manis yang kamu simpan.</p>
+            <form class="wishlist__form" data-wish-form>
+                <label>
+                    Apa harapan terbesarmu untuk tahun ini?
+                    <textarea name="wish" required maxlength="280" placeholder="Tulis sejujur-jujurnya, aku akan membacanya dengan senyum."></textarea>
+                </label>
+                <label>
+                    Hal manis apa yang ingin kita lakukan bareng?
+                    <input type="text" name="plan" required maxlength="120" placeholder="Misal: piknik di taman dengan kue rasa stroberi" />
+                </label>
+                <label>
+                    Lagu pink favoritmu?
+                    <input type="text" name="song" maxlength="120" placeholder="Tulis judul lagu yang membuatmu merasa manis" />
+                </label>
+                <label>
+                    Pilih kadar kemanisan harimu hari ini.
+                    <div class="slider">
+                        <input type="range" name="sweetness" min="1" max="5" value="3" />
+                        <div class="slider__labels" aria-hidden="true">
+                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                        </div>
+                    </div>
+                </label>
+                <button type="submit" class="wishlist__submit">Kirim Ke Aku</button>
+            </form>
+
+            <div class="wishlist__jar" data-wish-jar>
+                <h3>Simpanan Harapanmu</h3>
+                <p class="wishlist__empty" data-empty-message>Belum ada yang masuk. Aku tunggu ya tulisannya.</p>
+            </div>
+        </section>
+
+        <section class="mood" aria-labelledby="mood-title">
+            <h2 id="mood-title">Ubah Nuansa Sesukamu</h2>
+            <p class="section-lead">Pilih suasana yang paling cocok dengan perasaanmu hari ini.</p>
+            <div class="mood__buttons">
+                <button data-mood="sunrise">Sunrise Blossom</button>
+                <button data-mood="twilight">Twilight Bloom</button>
+                <button data-mood="default" class="is-active">Pink Dream</button>
+            </div>
+        </section>
+
+        <section class="greeting" aria-labelledby="greeting-title">
+            <h2 id="greeting-title">Selamat Ulang Tahun, Cantikku</h2>
+            <p class="greeting__lead">Saat semua sakura jatuh pelan, aku ingin kamu tahu kalau detik ini seluruh dunia sedang merayakan kamu.</p>
+            <div class="greeting__banner" aria-hidden="true">
+                <span>Happy</span>
+                <span>Birthday</span>
+                <span>Love</span>
+            </div>
+            <button type="button" class="greeting__cta" data-sparkles>Kasih Pelangi Kecil</button>
+            <p class="greeting__signature">Dengan seluruh rasa manis, <span>aku</span>.</p>
+        </section>
+    </main>
+
+    <div class="birthday-celebration" data-celebration hidden aria-hidden="true">
+        <div class="birthday-celebration__card" role="alertdialog" aria-labelledby="celebration-title" aria-describedby="celebration-message celebration-note">
+            <button type="button" class="birthday-celebration__close" data-close-celebration aria-label="Tutup pesan">&times;</button>
+            <p class="birthday-celebration__eyebrow">Saat yang Ditunggu</p>
+            <h2 id="celebration-title" data-celebration-title>Selamat ulang tahun, manisku</h2>
+            <p id="celebration-message" class="birthday-celebration__message" data-celebration-message>Jam menunjukkan 00:00 dan hari ini hanya tentang kamu. Terima kasih sudah hadir di hidupku.</p>
+            <p id="celebration-note" class="birthday-celebration__note" data-celebration-note>Aku akan ada di sampingmu untuk mewujudkan semua harapanmu.</p>
+            <button type="button" class="birthday-celebration__burst" data-firework-trigger>
+                <span aria-hidden="true">🎆</span>
+                Pecahkan Kembang Api Manis
+            </button>
+            <small class="birthday-celebration__hint">(Kalau di hari H, tombol ini bakal kusertai kejutan lain juga!)</small>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Terima kasih sudah menjadi rasa manis favoritku setiap hari. Tunggu aku wujudkan semua harapanmu ya.</p>
+    </footer>
+
+    <template id="wish-template">
+        <article class="wish-card">
+            <h4>Catatan Manismu</h4>
+            <p class="wish-card__wish" data-field="wish"></p>
+            <p class="wish-card__plan" data-field="plan"></p>
+            <p class="wish-card__song" data-field="song"></p>
+            <p class="wish-card__level" data-field="sweetness"></p>
+            <time class="wish-card__time" data-field="time"></time>
+        </article>
+    </template>
+
+    <audio data-backsound src="backsound.mp3" preload="auto" loop hidden></audio>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
