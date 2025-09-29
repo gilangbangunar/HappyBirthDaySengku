@@ -4,24 +4,17 @@ let hasCelebrated = false;
 let fireworkTriggerButton = null;
 let isSakuraActive = true;
 let sakuraTimer = null;
-let audioContext = null;
-let melodyPlaying = false;
-let melodyResetTimer = null;
-let melodyButton = null;
-let autoMelodyAttempted = false;
-let melodyUnlockHandlerAttached = false;
-
-const MELODY_LABEL_DEFAULT = 'Putar Melodi Manis';
-const MELODY_LABEL_PLAYING = 'Melodi Sedang Diputar...';
-const MELODY_LABEL_REPLAY = 'Putar Lagi Melodinya';
-const MELODY_LABEL_ENABLE = 'Klik untuk Putar Melodi';
+let backsoundElement = null;
+let backsoundStarted = false;
+let backsoundUnlockHandlerAttached = false;
+let backsoundUnlockHandler = null;
 
 const qs = (selector, scope = document) => scope.querySelector(selector);
 const qsa = (selector, scope = document) => [...scope.querySelectorAll(selector)];
 
 document.addEventListener('DOMContentLoaded', () => {
     fireworkTriggerButton = qs('[data-firework-trigger]');
-    melodyButton = qs('[data-play-melody]');
+    backsoundElement = qs('[data-backsound]');
 
     initSmoothScroll();
     initCountdown();
@@ -31,18 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initMoodSwitch();
     initCelebrationPreview();
     initSakuraToggle();
-    initMelodyButton();
+    initBacksound();
     initSparkles();
-
-    setTimeout(() => {
-        attemptAutoMelody().then(success => {
-            if (!success) {
-                attachMelodyUnlockHandlers();
-            }
-        });
-    }, 600);
-
-    attachMelodyUnlockHandlers();
 });
 
 function initSmoothScroll() {
@@ -50,6 +33,9 @@ function initSmoothScroll() {
         btn.addEventListener('click', () => {
             const targetId = btn.getAttribute('data-scroll');
             const target = document.getElementById(targetId);
+            if (btn.hasAttribute('data-play-backsound')) {
+                playBacksound();
+            }
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth' });
             }
@@ -246,7 +232,7 @@ function initCelebrationPreview() {
     const container = qs('[data-celebration]');
 
     previewButton?.addEventListener('click', () => {
-        launchBirthdayMoment({ preview: true });
+        launchBirthdayMoment({ preview: false, markCelebrated: false });
     });
 
     closeButton?.addEventListener('click', hideCelebration);
@@ -269,10 +255,10 @@ function initCelebrationPreview() {
     });
 }
 
-function launchBirthdayMoment({ preview = false } = {}) {
+function launchBirthdayMoment({ preview = false, markCelebrated = !preview } = {}) {
     const container = qs('[data-celebration]');
     if (!container) return;
-    if (hasCelebrated && !preview) return;
+    if (hasCelebrated && markCelebrated && !preview) return;
 
     updateCelebrationCopy(preview);
 
@@ -296,6 +282,9 @@ function launchBirthdayMoment({ preview = false } = {}) {
 
     if (!preview) {
         triggerFireworks({ rounds: 4, burstSize: 24 });
+    }
+
+    if (markCelebrated && !preview) {
         hasCelebrated = true;
     }
 }
@@ -410,145 +399,65 @@ function createPetal(layer, initial = false) {
     layer.appendChild(petal);
 }
 
-function initMelodyButton() {
-    if (!melodyButton) return;
-    updateMelodyButtonState('default');
+function initBacksound() {
+    if (!backsoundElement) return;
 
-    melodyButton.addEventListener('click', () => {
-        if (melodyPlaying) return;
-        attemptAutoMelody({ forced: true }).then(success => {
-            if (!success) {
-                updateMelodyButtonState('enable');
-            }
-        });
-    });
-}
-
-function updateMelodyButtonState(mode = 'default') {
-    if (!melodyButton) return;
-    melodyButton.classList.toggle('is-active', mode === 'playing');
-    melodyButton.disabled = mode === 'playing';
-
-    let label = MELODY_LABEL_DEFAULT;
-    if (mode === 'playing') {
-        label = MELODY_LABEL_PLAYING;
-    } else if (mode === 'replay') {
-        label = MELODY_LABEL_REPLAY;
-    } else if (mode === 'enable') {
-        label = MELODY_LABEL_ENABLE;
+    backsoundElement.setAttribute('playsinline', '');
+    backsoundElement.loop = true;
+    if (typeof backsoundElement.volume === 'number') {
+        backsoundElement.volume = 0.55;
     }
 
-    melodyButton.textContent = label;
-}
-
-function ensureAudioContext() {
-    if (audioContext) return audioContext;
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return null;
-    audioContext = new AudioCtx();
-    return audioContext;
-}
-
-function triggerMelodyPlayback() {
-    const context = ensureAudioContext();
-    if (!context) {
-        return Promise.reject(new Error('Audio context unavailable'));
+    const triggers = qsa('[data-play-backsound]');
+    if (triggers.length) {
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                playBacksound();
+            });
+        });
     }
 
-    return context.resume().then(() => {
-        playMelody();
-        onMelodyStart();
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && backsoundStarted) {
+            backsoundElement.play().catch(() => {
+                attachBacksoundUnlockHandlers();
+            });
+        }
     });
 }
 
-function attemptAutoMelody({ forced = false } = {}) {
-    if (melodyPlaying) return Promise.resolve(true);
-    if (!forced && autoMelodyAttempted) return Promise.resolve(false);
-    autoMelodyAttempted = true;
-
-    return triggerMelodyPlayback()
-        .then(() => true)
-        .catch(() => {
-            if (!forced) {
-                updateMelodyButtonState('enable');
-            }
-            return false;
+function playBacksound() {
+    if (!backsoundElement) return;
+    const playPromise = backsoundElement.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.then(() => {
+            backsoundStarted = true;
+            detachBacksoundUnlockHandlers();
+        }).catch(() => {
+            attachBacksoundUnlockHandlers();
         });
+    } else {
+        backsoundStarted = true;
+    }
 }
 
-function attachMelodyUnlockHandlers() {
-    if (melodyPlaying || melodyUnlockHandlerAttached) return;
-
-    let handler;
-    const cleanup = () => {
-        document.removeEventListener('pointerdown', handler);
-        document.removeEventListener('keydown', handler);
-        melodyUnlockHandlerAttached = false;
+function attachBacksoundUnlockHandlers() {
+    if (backsoundUnlockHandlerAttached) return;
+    backsoundUnlockHandler = () => {
+        detachBacksoundUnlockHandlers();
+        playBacksound();
     };
-
-    handler = () => {
-        attemptAutoMelody({ forced: true }).then(success => {
-            if (success) {
-                cleanup();
-            }
-        });
-    };
-
-    document.addEventListener('pointerdown', handler);
-    document.addEventListener('keydown', handler);
-    melodyUnlockHandlerAttached = true;
+    document.addEventListener('pointerdown', backsoundUnlockHandler);
+    document.addEventListener('keydown', backsoundUnlockHandler);
+    backsoundUnlockHandlerAttached = true;
 }
 
-function onMelodyStart() {
-    melodyPlaying = true;
-    updateMelodyButtonState('playing');
-    clearTimeout(melodyResetTimer);
-    melodyResetTimer = setTimeout(() => {
-        melodyPlaying = false;
-        updateMelodyButtonState('replay');
-    }, 9000);
-}
-
-function playMelody() {
-    if (!audioContext) return;
-    const now = audioContext.currentTime + 0.05;
-    const notes = [
-        { offset: 0, freq: 523.25, length: 0.8 },
-        { offset: 0.8, freq: 587.33, length: 0.7 },
-        { offset: 1.5, freq: 659.25, length: 0.7 },
-        { offset: 2.2, freq: 587.33, length: 0.8 },
-        { offset: 3.1, freq: 698.46, length: 0.9 },
-        { offset: 4.1, freq: 783.99, length: 0.9 },
-        { offset: 5.2, freq: 659.25, length: 0.8 },
-        { offset: 6.0, freq: 587.33, length: 0.8 },
-        { offset: 6.8, freq: 523.25, length: 1.1 }
-    ];
-
-    notes.forEach(note => {
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(note.freq, now + note.offset);
-        gain.gain.setValueAtTime(0, now + note.offset);
-        gain.gain.linearRampToValueAtTime(0.24, now + note.offset + 0.05);
-        gain.gain.linearRampToValueAtTime(0.18, now + note.offset + note.length - 0.08);
-        gain.gain.linearRampToValueAtTime(0, now + note.offset + note.length);
-        osc.connect(gain).connect(audioContext.destination);
-        osc.start(now + note.offset);
-        osc.stop(now + note.offset + note.length + 0.02);
-    });
-
-    const ambient = audioContext.createOscillator();
-    const ambientGain = audioContext.createGain();
-    ambient.type = 'sine';
-    ambient.frequency.setValueAtTime(392, now);
-    ambientGain.gain.setValueAtTime(0, now);
-    ambientGain.gain.linearRampToValueAtTime(0.08, now + 0.4);
-    ambientGain.gain.linearRampToValueAtTime(0.04, now + 6.5);
-    ambientGain.gain.linearRampToValueAtTime(0, now + 8);
-    ambient.connect(ambientGain).connect(audioContext.destination);
-    ambient.start(now);
-    ambient.stop(now + 8.2);
+function detachBacksoundUnlockHandlers() {
+    if (!backsoundUnlockHandlerAttached || !backsoundUnlockHandler) return;
+    document.removeEventListener('pointerdown', backsoundUnlockHandler);
+    document.removeEventListener('keydown', backsoundUnlockHandler);
+    backsoundUnlockHandlerAttached = false;
+    backsoundUnlockHandler = null;
 }
 
 function initSparkles() {
