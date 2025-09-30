@@ -302,3 +302,119 @@ body.is-celebrating::after{
   mix-blend-mode:screen;opacity:0;transition:opacity .36s ease
 }
 .love-notes__carousel--single .carousel__item.is-active::after{opacity:1}
+
+body[data-mood='sunrise'] {
+  background: linear-gradient(180deg, #fff4f7 0%, #ffe6f0 35%, #fff9fb 100%);
+  --text-primary: #45283b;
+  --text-secondary: #6f4d63;
+}
+body[data-mood='sunrise'] .hero__content,
+body[data-mood='sunrise'] .wishlist__form,
+body[data-mood='sunrise'] .wishlist__jar,
+body[data-mood='sunrise'] .greeting {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+body[data-mood='twilight'] {
+  background: radial-gradient(120% 140% at 50% 0%, #46306d 0%, #2b2153 45%, #11071f 100%);
+  --pink-soft: #f3d7ff;
+  --pink-medium: #d69cff;
+  --pink-strong: #b06fff;
+  --text-primary: #f7efff;
+  --text-secondary: #cab7ff;
+}
+body[data-mood='twilight'] .hero__content,
+body[data-mood='twilight'] .wishlist__form,
+body[data-mood='twilight'] .wishlist__jar,
+body[data-mood='twilight'] .greeting,
+body[data-mood='twilight'] .timeline__card,
+body[data-mood='twilight'] .countdown__unit,
+body[data-mood='twilight'] .carousel__item,
+body[data-mood='twilight'] .birthday-book__page {
+  background: linear-gradient(150deg, rgba(54, 32, 94, 0.92), rgba(94, 59, 136, 0.88));
+  color: var(--text-primary);
+  box-shadow: 0 26px 48px rgba(7, 3, 22, 0.45);
+}
+body[data-mood='twilight'] p,
+body[data-mood='twilight'] .section-lead,
+body[data-mood='twilight'] small,
+body[data-mood='twilight'] .timeline__teaser,
+body[data-mood='twilight'] .greeting__lead {
+  color: var(--text-secondary);
+}
+body[data-mood='twilight'] .hero__button,
+body[data-mood='twilight'] .wishlist__submit,
+body[data-mood='twilight'] .greeting__cta,
+body[data-mood='twilight'] .mood__buttons button.is-active {
+  background: linear-gradient(135deg, #a67bff, #ff8bf7);
+  color: #fff;
+}
+body[data-mood='twilight'] .carousel__track {
+  background: rgba(48, 30, 83, 0.65);
+}
+body[data-mood='twilight'] .hero__button.hero__button--ghost {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+body[data-mood='twilight'] .hero {
+  background: transparent;
+}
+body[data-mood='twilight'] .hero::after {
+  background: radial-gradient(380px 260px at 50% 14%, rgba(255, 214, 255, 0.28), transparent 70%);
+  opacity: 0.45;
+}
+body[data-mood='twilight'] main {
+  background: linear-gradient(180deg, rgba(33, 16, 52, 0.0) 0%, rgba(25, 12, 41, 0.65) 100%);
+}
+
+
+.greeting__celebration-banner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.greeting__celebration-banner.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.greeting__celebration-banner span {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 8vw, 3.8rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pink-strong);
+  background: rgba(255, 255, 255, 0.85);
+  padding: 0.6rem 2rem;
+  border-radius: 24px;
+  box-shadow: 0 24px 40px rgba(255, 150, 210, 0.28);
+}
+
+
+body[data-mood='twilight'] .wishlist__jar {
+  background: linear-gradient(180deg, rgba(86, 57, 129, 0.85), rgba(58, 36, 97, 0.88));
+  border-color: rgba(255, 255, 255, 0.18);
+}
+body[data-mood='twilight'] .wish-card {
+  background: rgba(255, 245, 255, 0.92);
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #3c2660;
+  box-shadow: 0 14px 32px rgba(14, 6, 30, 0.32);
+}
+body[data-mood='twilight'] .wish-card p,
+body[data-mood='twilight'] .wish-card__level,
+body[data-mood='twilight'] .wish-card__time {
+  color: #4a3277;
+}
+body[data-mood='twilight'] .wish-card__wish {
+  color: #a67bff;
+}
