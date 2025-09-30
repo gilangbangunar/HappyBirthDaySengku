@@ -1,8 +1,6 @@
 const targetDate = new Date('2025-10-01T00:00:00+07:00');
 const storageKey = 'sweet-wishes';
 let hasCelebrated = false;
-let isSakuraActive = true;
-let sakuraTimer = null;
 let backsoundElement = null;
 let backsoundStarted = false;
 let backsoundUnlockHandlerAttached = false;
@@ -98,8 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initMoodSwitch();
     buildCelebrationBook();
     initCelebrationControls();
-    initSakuraToggle();
     initBacksound();
+    
     initSparkles();
     scheduleAutoCelebration();
 });
@@ -345,10 +343,6 @@ function initCarousel() {
     window.addEventListener('resize', updateCarousel);
 }
 
-
-
-
-
 function initWishForm() {
     const form = qs('[data-wish-form]');
     const jar = qs('[data-wish-jar]');
@@ -505,6 +499,10 @@ function launchBirthdayMoment({ preview = false, markCelebrated = !preview } = {
     const startY = preview ? '64%' : '74%';
     celebrate(confettiAmount, startY);
     startCelebrationAura(preview);
+    playBacksound(); // ensure backsound aktif saat buku dibuka
+    if (!preview) {
+        showCelebrationBanner();
+    }
     setTimeout(() => launchPageFireworks(), 260);
     if (!preview) {
         triggerFireworks({ rounds: 4, burstSize: 28 });
@@ -607,7 +605,6 @@ function adjustBookStageHeight(page) {
         bookStageElement.style.height = `${Math.round(measured + 16)}px`;
     }
 }
-
 
 function setBookPage(targetIndex, { instant = false, direction = 'forward' } = {}) {
     if (!bookPagesElement) return;
@@ -740,83 +737,6 @@ function launchPageFireworks() {
         rocket.remove();
     });
     document.body.appendChild(rocket);
-}
-function initSakuraToggle() {
-    const toggleButton = qs('[data-toggle-sakura]');
-    const layer = qs('[data-sakura-layer]');
-    if (!layer) return;
-
-    if (!toggleButton) {
-        if (isSakuraActive) {
-            startSakura(layer);
-        }
-        return;
-    }
-
-    const updateState = () => {
-        toggleButton.classList.toggle('is-active', isSakuraActive);
-        toggleButton.textContent = isSakuraActive ? 'Hentikan Sakura Manis' : 'Taburkan Sakura';
-    };
-
-    toggleButton.addEventListener('click', () => {
-        isSakuraActive = !isSakuraActive;
-        if (isSakuraActive) {
-            startSakura(layer);
-        } else {
-            stopSakura(layer);
-        }
-        updateState();
-    });
-
-    updateState();
-    if (isSakuraActive) {
-        startSakura(layer);
-    }
-}
-
-function startSakura(layer) {
-    if (sakuraTimer) return;
-    for (let i = 0; i < 16; i += 1) {
-        createPetal(layer, true);
-    }
-    sakuraTimer = setInterval(() => {
-        createPetal(layer);
-    }, 420);
-}
-
-function stopSakura(layer) {
-    clearInterval(sakuraTimer);
-    sakuraTimer = null;
-    layer.querySelectorAll('.sakura-petal').forEach(petal => {
-        petal.style.transition = 'opacity 0.6s ease';
-        petal.style.opacity = '0';
-        setTimeout(() => petal.remove(), 600);
-    });
-}
-
-function createPetal(layer, initial = false) {
-    const petal = document.createElement('span');
-    petal.className = 'sakura-petal';
-    const startX = (Math.random() * 120 - 10).toFixed(2);
-    const endX = (Number(startX) + (Math.random() * 20 - 10)).toFixed(2);
-    const scale = (0.6 + Math.random() * 0.8).toFixed(2);
-    const duration = 9 + Math.random() * 6;
-    const spinDuration = 3 + Math.random() * 2;
-
-    petal.style.setProperty('--start-x', `${startX}vw`);
-    petal.style.setProperty('--end-x', `${endX}vw`);
-    petal.style.setProperty('--scale', scale);
-    petal.style.animationDuration = `${duration}s, ${spinDuration}s`;
-    if (initial) {
-        const delay = Math.random() * duration;
-        petal.style.animationDelay = `-${delay}s, -${Math.random() * spinDuration}s`;
-    }
-
-    petal.addEventListener('animationend', () => {
-        petal.remove();
-    });
-
-    layer.appendChild(petal);
 }
 
 function initBacksound() {
@@ -992,7 +912,6 @@ function stopCelebrationSparkles() {
     celebrationSparkleTimer = null;
 }
 
-
 function isBirthdayWindow() {
     const now = new Date();
     try {
@@ -1017,22 +936,13 @@ function scheduleAutoCelebration() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function showCelebrationBanner() {
+    const banner = qs('[data-celebration-banner]');
+    if (!banner) return;
+    banner.classList.add('is-visible');
+    banner.setAttribute('aria-hidden', 'false');
+    setTimeout(() => {
+        banner.classList.remove('is-visible');
+        banner.setAttribute('aria-hidden', 'true');
+    }, 1600);
+}
